@@ -189,6 +189,8 @@
     const form = document.getElementById('quiz-form');
     const resultBox = document.getElementById('result');
     const playerName = {{ name|tojson }};
+    const playerEmail = {{ email|tojson }};
+    const playerPhone = {{ phone|tojson }};
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -212,6 +214,8 @@
 
       const payload = {
         name: playerName,
+        email: playerEmail,
+        phone: playerPhone,
         score: `${score} / ${QUIZ_DATA.length}`
       };
 

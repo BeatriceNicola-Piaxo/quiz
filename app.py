@@ -27,9 +27,9 @@ def get_sheet():
 
 def ensure_headers(sheet):
     if not sheet.row_values(1):
-        sheet.append_row(["name", "score", "submitted_at"])
-    elif sheet.row_values(1) != ["name", "score", "submitted_at"]:
-        sheet.insert_row(["name", "score", "submitted_at"], 1)
+        sheet.append_row(["name", "email", "phone", "score", "submitted_at"])
+    elif sheet.row_values(1) != ["name", "email", "phone", "score", "submitted_at"]:
+        sheet.insert_row(["name", "email", "phone", "score", "submitted_at"], 1)
         sheet.delete_row(2)
 
 
@@ -41,9 +41,13 @@ def index():
 @app.get("/quiz")
 def quiz_page():
     name = request.args.get("name", "").strip()
-    if not name:
+    email = request.args.get("email", "").strip()
+    phone = request.args.get("phone", "").strip()
+
+    if not name or not email or not phone:
         return redirect(url_for("index"))
-    return render_template("quiz.html", name=name)
+
+    return render_template("quiz.html", name=name, email=email, phone=phone)
 
 
 @app.get("/health")
@@ -55,10 +59,12 @@ def health():
 def submit_score():
     payload = request.get_json(silent=True) or {}
     name = str(payload.get("name") or "").strip()
+    email = str(payload.get("email") or "").strip()
+    phone = str(payload.get("phone") or "").strip()
     score = str(payload.get("score") or "").strip()
 
-    if not name or not score:
-        return jsonify({"error": "Missing required fields: name and score"}), 400
+    if not name or not email or not phone or not score:
+        return jsonify({"error": "Missing required fields: name, email, phone and score"}), 400
 
     results = []
     if RESULTS_FILE.exists():
@@ -81,7 +87,7 @@ def submit_score():
         sheet = get_sheet()
         ensure_headers(sheet)
         submitted_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
-        sheet.append_row([name, score, submitted_at])
+        sheet.append_row([name, email, phone, score, submitted_at])
     except Exception as exc:
         return jsonify({"error": f"Failed to save to Google Sheet: {exc}"}), 500
 

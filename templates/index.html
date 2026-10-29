@@ -96,12 +96,22 @@
         />
       </div>
       <h1>🎯 Quiz Noaptea Companiilor 2026</h1>
-      <p>Enter your name first, then continue to the questions.</p>
+      <p>Enter your name, email and phone number, then continue to the questions.</p>
 
       <form method="get" action="/quiz">
         <div class="name-wrap">
-          <label for="name">Your Name / Nickname</label>
+          <label for="name">Name</label>
           <input id="name" name="name" type="text" placeholder="John Doe" required />
+        </div>
+
+        <div class="name-wrap">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="john@example.com" required />
+        </div>
+
+        <div class="name-wrap">
+          <label for="phone">Phone Number</label>
+          <input id="phone" name="phone" type="tel" placeholder="0712 345 678" required />
         </div>
 
         <button type="submit">Start Quiz</button>
