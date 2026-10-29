@@ -19,7 +19,6 @@ QUIZ_DATA = [
     {"question": "Where are the results being saved?", "options": ["Local File", "Cloud Spreadsheet", "Nowhere"], "answer": "Cloud Spreadsheet"}
 ]
 
-# PASTE YOUR MICROSOFT POWER AUTOMATE HTTP POST URL BETWEEN THE QUOTES BELOW:
 WEBHOOK_URL = "https://default08b0d3b5eda34bb599948637f10aa2.5e.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/13/workflows/636b6dd38f354950a6eab7e377afa1b6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=c0U1KRNSLl-bNKJfO21341O6Iw1tOzCJEggJktXSEEQ"
 
 async def check_and_save_answers(name, q1, q2):
@@ -45,7 +44,7 @@ async def check_and_save_answers(name, q1, q2):
             headers={"Content-Type": "application/json"},
             body=json.dumps(payload)
         )
-        save_status = "📊 Score saved successfully to the Excel leaderboard!"
+        save_status = "📊 Score saved successfully to the Excel spreadsheet!"
     except Exception as e:
         save_status = "⚠️ Quiz completed, but score tracking failed to send."
 
@@ -57,8 +56,8 @@ with gr.Blocks(title="Python Quiz App") as demo:
     
     name_input = gr.Textbox(label="Enter Your Name / Nickname", placeholder="John Doe")
     
-    r1 = gr.Radio(choices=QUIZ_DATA["options"], label=f"Question 1: {QUIZ_DATA['question']}")
-    r2 = gr.Radio(choices=QUIZ_DATA["options"], label=f"Question 2: {QUIZ_DATA['question']}")
+    r1 = gr.Radio(choices=QUIZ_DATA[0]["options"], label=f"Question 1: {QUIZ_DATA[0]['question']}")
+    r2 = gr.Radio(choices=QUIZ_DATA[1]["options"], label=f"Question 2: {QUIZ_DATA[1]['question']}")
     
     submit_btn = gr.Button("Submit Answers", variant="primary")
     output = gr.Markdown()
