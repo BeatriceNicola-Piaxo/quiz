@@ -1,34 +1,263 @@
-# Quiz App
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Noaptea Companiilor 2026</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --border: #e5e7eb;
+    }
 
-A simple Flask quiz app for deployment on Render.
+    * { box-sizing: border-box; }
 
-## Run locally
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
-```
+    .container {
+      max-width: 760px;
+      margin: 48px auto;
+      padding: 24px;
+    }
 
-Then open: http://localhost:5000
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+      padding: 32px;
+    }
 
-## Deploy on Render
+    h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 2rem;
+    }
 
-1. Create a new Web Service in Render.
-2. Connect this repository.
-3. Keep the default root directory as the repo root.
-4. Set the start command to:
+    p {
+      margin-top: 0;
+      color: var(--muted);
+    }
 
-```bash
-gunicorn app:app
-```
+    .question {
+      margin-top: 24px;
+    }
 
-5. Add environment variable if needed:
-   - `PORT` is automatically provided by Render.
+    .question h2 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
 
-## Files
+    .options {
+      display: grid;
+      gap: 10px;
+    }
 
-- `app.py` – Flask app and submission logic
-- `templates/index.html` – quiz page
-- `results.json` – created automatically on first submit
+    label.option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #f9fafb;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      accent-color: var(--primary);
+      width: 18px;
+      height: 18px;
+    }
+
+    .name-wrap {
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+
+    button {
+      margin-top: 28px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    .result {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 12px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      display: none;
+    }
+
+    .result.visible {
+      display: block;
+    }
+
+    .result.success {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+    }
+
+    .result.error {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .result h3 {
+      margin: 0 0 8px 0;
+    }
+
+    .result p {
+      margin: 0;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>🎯 Quiz Noaptea Companiilor 2026</h1>
+      <p>Enter your name, select your choices, and hit submit.</p>
+
+      <form id="quiz-form">
+        <div class="name-wrap">
+          <label for="name"><strong>Enter Your Name / Nickname</strong></label>
+          <input id="name" name="name" type="text" placeholder="John Doe" required />
+        </div>
+
+        <div class="question">
+          <h2>Question 1: Which platform are we using to host this quiz cleanly?</h2>
+          <div class="options">
+            <label class="option"><input type="radio" name="q1" value="Render" required /> Render</label>
+            <label class="option"><input type="radio" name="q1" value="Hugging Face" /> Hugging Face</label>
+            <label class="option"><input type="radio" name="q1" value="GitHub Pages" /> GitHub Pages</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <h2>Question 2: Where are the results being saved?</h2>
+          <div class="options">
+            <label class="option"><input type="radio" name="q2" value="Local File" required /> Local File</label>
+            <label class="option"><input type="radio" name="q2" value="Cloud Spreadsheet" /> Cloud Spreadsheet</label>
+            <label class="option"><input type="radio" name="q2" value="Nowhere" /> Nowhere</label>
+          </div>
+        </div>
+
+        <button type="submit">Submit Answers</button>
+      </form>
+
+      <div id="result" class="result" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    const QUIZ_DATA = [
+      {
+        question: 'Which platform are we using to host this quiz cleanly?',
+        options: ['Render', 'Hugging Face', 'GitHub Pages'],
+        answer: 'GitHub Pages'
+      },
+      {
+        question: 'Where are the results being saved?',
+        options: ['Local File', 'Cloud Spreadsheet', 'Nowhere'],
+        answer: 'Cloud Spreadsheet'
+      }
+    ];
+
+    const form = document.getElementById('quiz-form');
+    const resultBox = document.getElementById('result');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const q1 = form.querySelector('input[name="q1"]:checked')?.value;
+      const q2 = form.querySelector('input[name="q2"]:checked')?.value;
+
+      if (!name || !q1 || !q2) {
+        showResult('⚠️ Please enter your name and answer all questions!', 'error');
+        return;
+      }
+
+      let score = 0;
+      const answers = [q1, q2];
+
+      answers.forEach((answer, index) => {
+        if (answer === QUIZ_DATA[index].answer) {
+          score += 1;
+        }
+      });
+
+      const payload = {
+        name,
+        q1,
+        q2,
+        score: `${score} / ${QUIZ_DATA.length}`
+      };
+
+      try {
+        const response = await fetch('/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const responseData = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(responseData.error || 'Submission failed');
+        }
+
+        showResult(
+          `## 🎉 Quiz Completed, ${name}!\n\n**Your Score: ${score} / ${QUIZ_DATA.length}**\n\n📊 Your answers were saved successfully!`,
+          'success'
+        );
+      } catch (error) {
+        showResult(
+          `## 🎉 Quiz Completed, ${name}!\n\n**Your Score: ${score} / ${QUIZ_DATA.length}**\n\n⚠️ Quiz completed, but the backend could not save the answers.`,
+          'error'
+        );
+      }
+    });
+
+    function showResult(message, type) {
+      resultBox.className = `result visible ${type}`;
+      resultBox.innerHTML = `<h3>Result</h3><p>${message.replace(/\n/g, '<br>')}</p>`;
+    }
+  </script>
+</body>
+</html>
