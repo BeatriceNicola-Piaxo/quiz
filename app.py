@@ -10,27 +10,18 @@ from google.oauth2.service_account import Credentials
 BASE_DIR = Path(__file__).resolve().parent
 RESULTS_FILE = BASE_DIR / "results.json"
 
-# Set this in your environment or leave default if you want to use a local file
-GOOGLE_SHEET_ID = os.environ.get("GOOGLE_SHEET_ID", "YOUR_SHEET_ID_HERE")
-
-# Google Sheets API scope
+GOOGLE_SHEET_ID = os.environ.get("GOOGLE_SHEET_ID")
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 app = Flask(__name__)
 
 
 def get_sheet():
-    credentials_path = BASE_DIR / "credentials.json"
+    creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+    if not creds_path:
+        raise FileNotFoundError("GOOGLE_APPLICATION_CREDENTIALS is not set")
 
-    if not credentials_path.exists():
-        raise FileNotFoundError(
-            "credentials.json not found. Put the downloaded Google service account JSON file in the project root."
-        )
-
-    creds = Credentials.from_service_account_file(
-        str(credentials_path),
-        scopes=SCOPES,
-    )
+    creds = Credentials.from_service_account_file(creds_path, scopes=SCOPES)
     client = gspread.authorize(creds)
     return client.open_by_key(GOOGLE_SHEET_ID).sheet1
 
@@ -39,11 +30,8 @@ def ensure_headers(sheet):
     if not sheet.row_values(1):
         sheet.append_row(["name", "score", "submitted_at"])
     elif sheet.row_values(1) != ["name", "score", "submitted_at"]:
-        current = sheet.row_values(1)
-        if current:
-            # if the sheet already has something else, we still add the expected header to row 1
-            sheet.insert_row(["name", "score", "submitted_at"], 1)
-            sheet.delete_row(2)
+        sheet.insert_row(["name", "score", "submitted_at"], 1)
+        sheet.delete_row(2)
 
 
 @app.get("/")
@@ -65,7 +53,6 @@ def submit_score():
     if not name or not score:
         return jsonify({"error": "Missing required fields: name and score"}), 400
 
-    # Save local JSON backup
     results = []
     if RESULTS_FILE.exists():
         try:
@@ -87,9 +74,7 @@ def submit_score():
         submitted_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
         sheet.append_row([name, score, submitted_at])
     except Exception as exc:
-        return jsonify({
-            "error": f"Failed to save to Google Sheet: {str(exc)}"
-        }), 500
+        return jsonify({"error": f"Failed to save to Google Sheet: {str(exc)}"}), 500
 
     return jsonify({
         "message": "Score saved successfully",
