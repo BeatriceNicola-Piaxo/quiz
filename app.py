@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import json
 import os
+from datetime import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -38,7 +39,11 @@ def submit_score():
         except (json.JSONDecodeError, OSError):
             results = []
 
-    results.append({"name": name, "score": score})
+    results.append({
+        "name": name,
+        "score": score,
+        "submitted_at": datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    })
 
     with RESULTS_FILE.open("w", encoding="utf-8") as file:
         json.dump(results, file, ensure_ascii=False, indent=2)
@@ -47,6 +52,7 @@ def submit_score():
         "message": "Score saved successfully",
         "name": name,
         "score": score,
+        "file": str(RESULTS_FILE.name),
     })
 
 
