@@ -54,6 +54,17 @@
       margin-top: 20px;
     }
 
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 1rem;
+      margin-top: 8px;
+      background: white;
+      box-sizing: border-box;
+    }
+
     label {
       display: block;
       font-weight: 700;
@@ -100,18 +111,18 @@
 
       <form method="get" action="/quiz">
         <div class="name-wrap">
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" placeholder="John Doe" required />
+          <label for="name"><strong>Name</strong></label>
+          <input class="form-control" id="name" name="name" type="text" placeholder="John Doe" required />
         </div>
 
         <div class="name-wrap">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="john@example.com" required />
+          <label for="email"><strong>Email</strong></label>
+          <input class="form-control" id="email" name="email" type="email" placeholder="john@example.com" required />
         </div>
 
         <div class="name-wrap">
-          <label for="phone">Phone Number</label>
-          <input id="phone" name="phone" type="tel" placeholder="0712 345 678" required />
+          <label for="phone"><strong>Phone Number</strong></label>
+          <input class="form-control" id="phone" name="phone" type="tel" placeholder="0712 345 678" required />
         </div>
 
         <button type="submit">Start Quiz</button>
