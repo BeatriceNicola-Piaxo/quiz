@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Quiz App</title>
+    <script type="module" src="https://jsdelivr.net"></script>
+    <link rel="stylesheet" href="https://jsdelivr.net" />
+</head>
+<body>
+
+<gradio-lite>
+<python>
+import gradio as gr
+import json
+from pyodide.http import pyfetch 
+
+QUIZ_DATA = [
+    {"question": "Which platform are we using to host this quiz cleanly?", "options": ["Render", "Hugging Face", "GitHub Pages"], "answer": "GitHub Pages"},
+    {"question": "Where are the results being saved?", "options": ["Local File", "Cloud Spreadsheet", "Nowhere"], "answer": "Cloud Spreadsheet"}
+]
+
+# PASTE YOUR GOOGLE WEB APP URL BETWEEN THE QUOTES BELOW:
+WEBHOOK_URL = "https://default08b0d3b5eda34bb599948637f10aa2.5e.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/13/workflows/636b6dd38f354950a6eab7e377afa1b6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=c0U1KRNSLl-bNKJfO21341O6Iw1tOzCJEggJktXSEEQ"
+
+async def check_and_save_answers(name, q1, q2):
+    if not name or not q1 or not q2:
+        return "⚠️ Please enter your name and answer all questions!"
+        
+    score = 0
+    user_answers = [q1, q2]
+    
+    for i, q in enumerate(QUIZ_DATA):
+        if user_answers[i] == q["answer"]:
+            score += 1
+            
+    payload = {
+        "name": name,
+        "score": f"{score} / {len(QUIZ_DATA)}"
+    }
+    
+    try:
+        await pyfetch(
+            WEBHOOK_URL,
+            method="POST",
+            headers={"Content-Type": "application/json"},
+            body=json.dumps(payload)
+        )
+        save_status = "📊 Score saved successfully to the spreadsheet!"
+    except Exception as e:
+        save_status = "⚠️ Quiz completed, but score tracking failed to send."
+
+    return f"## 🎉 Quiz Completed, {name}!\n\n**Your Score: {score} / {len(QUIZ_DATA)}**\n\n{save_status}"
+
+with gr.Blocks(title="Python Quiz App") as demo:
+    gr.Markdown("# 🎯 Pure Python Web Quiz")
+    gr.Markdown("Enter your name, select your choices, and hit submit!")
+    
+    name_input = gr.Textbox(label="Enter Your Name / Nickname", placeholder="John Doe")
+    
+    r1 = gr.Radio(choices=QUIZ_DATA["options"], label=f"Question 1: {QUIZ_DATA['question']}")
+    r2 = gr.Radio(choices=QUIZ_DATA["options"], label=f"Question 2: {QUIZ_DATA['question']}")
+    
+    submit_btn = gr.Button("Submit Answers", variant="primary")
+    output = gr.Markdown()
+    
+    submit_btn.click(fn=check_and_save_answers, inputs=[name_input, r1, r2], outputs=output)
+
+demo.launch()
+</python>
+</gradio-lite>
+
+</body>
+</html>
