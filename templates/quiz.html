@@ -12,8 +12,6 @@
       --primary-dark: #1d4ed8;
       --text: #1f2937;
       --muted: #6b7280;
-      --success: #16a34a;
-      --danger: #dc2626;
       --border: #e5e7eb;
     }
 
@@ -45,19 +43,47 @@
       margin-top: 0;
       margin-bottom: 8px;
       font-size: 2rem;
+      text-align: center;
     }
 
     .welcome {
       margin-bottom: 24px;
       color: var(--text);
       font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .category-header {
+      margin: 0 0 24px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .category-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: #dbeafe;
+      border-radius: 999px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+    }
+
+    .category-header h2 {
+      margin: 0;
+      font-size: 1.6rem;
     }
 
     .question {
       margin-top: 24px;
     }
 
-    .question h2 {
+    .question h3 {
       font-size: 1.1rem;
       margin-bottom: 12px;
     }
@@ -82,10 +108,16 @@
       accent-color: var(--primary);
       width: 18px;
       height: 18px;
+      flex-shrink: 0;
+    }
+
+    .actions {
+      margin-top: 28px;
+      display: flex;
+      justify-content: flex-end;
     }
 
     button {
-      margin-top: 28px;
       background: var(--primary);
       color: white;
       border: none;
@@ -99,38 +131,6 @@
     button:hover {
       background: var(--primary-dark);
     }
-
-    .result {
-      margin-top: 24px;
-      padding: 18px;
-      border-radius: 12px;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      display: none;
-    }
-
-    .result.visible {
-      display: block;
-    }
-
-    .result.success {
-      background: #ecfdf5;
-      border-color: #a7f3d0;
-    }
-
-    .result.error {
-      background: #fef2f2;
-      border-color: #fecaca;
-    }
-
-    .result h3 {
-      margin: 0 0 8px 0;
-    }
-
-    .result p {
-      margin: 0;
-      color: var(--text);
-    }
   </style>
 </head>
 <body>
@@ -143,125 +143,37 @@
           style="max-width:180px; height:auto; display:block; margin:0 auto 10px;"
         />
       </div>
+
       <h1>🎯 Quiz Noaptea Companiilor 2026</h1>
       <p class="welcome">Welcome, {{ name }}!</p>
 
-      <form id="quiz-form"></form>
+      <div class="category-header">
+        <div class="category-badge">Category {{ page_num + 1 }} of {{ total_pages }}</div>
+        <h2>{{ category }}</h2>
+      </div>
 
-      <div id="result" class="result" aria-live="polite"></div>
+      <form action="{{ url_for('submit_quiz_page') }}" method="post">
+        <input type="hidden" name="page_num" value="{{ page_num }}" />
+
+        {% for question in questions %}
+          <div class="question">
+            <h3>{{ loop.index }}. {{ question.question }}</h3>
+            <div class="options">
+              {% for option in question.options %}
+                <label class="option">
+                  <input type="radio" name="q_{{ question.id }}" value="{{ option }}" required />
+                  <span>{{ option }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+        <div class="actions">
+          <button type="submit">{{ 'Finish Quiz' if is_last_page else 'Next Category' }}</button>
+        </div>
+      </form>
     </div>
   </div>
-
-  <script>
-    const QUIZ_DATA = {{ questions|tojson }};
-
-    const form = document.getElementById('quiz-form');
-    const resultBox = document.getElementById('result');
-    const playerName = {{ name|tojson }};
-    const playerEmail = {{ email|tojson }};
-    const playerPhone = {{ phone|tojson }};
-
-    function buildQuizForm() {
-      QUIZ_DATA.forEach((question, index) => {
-        const questionBlock = document.createElement('div');
-        questionBlock.className = 'question';
-
-        const title = document.createElement('h2');
-        title.textContent = `Question ${index + 1}: ${question.question}`;
-
-        const options = document.createElement('div');
-        options.className = 'options';
-
-        question.options.forEach((option) => {
-          const label = document.createElement('label');
-          label.className = 'option';
-
-          const radio = document.createElement('input');
-          radio.type = 'radio';
-          radio.name = `q${index}`;
-          radio.value = option;
-          radio.required = true;
-
-          const text = document.createElement('span');
-          text.textContent = option;
-
-          label.appendChild(radio);
-          label.appendChild(text);
-          options.appendChild(label);
-        });
-
-        questionBlock.appendChild(title);
-        questionBlock.appendChild(options);
-        form.appendChild(questionBlock);
-      });
-
-      const submitButton = document.createElement('button');
-      submitButton.type = 'submit';
-      submitButton.textContent = 'Submit Answers';
-      form.appendChild(submitButton);
-    }
-
-    buildQuizForm();
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      let score = 0;
-      let missingAnswer = false;
-
-      QUIZ_DATA.forEach((question, index) => {
-        const selectedAnswer = form.querySelector(`input[name="q${index}"]:checked`)?.value;
-        if (!selectedAnswer) {
-          missingAnswer = true;
-          return;
-        }
-
-        if (selectedAnswer === question.answer) {
-          score += 1;
-        }
-      });
-
-      if (missingAnswer) {
-        showResult('⚠️ Please answer all questions before submitting.', 'error');
-        return;
-      }
-
-      const payload = {
-        name: playerName,
-        email: playerEmail,
-        phone: playerPhone,
-        score: `${score} / ${QUIZ_DATA.length}`
-      };
-
-      try {
-        const response = await fetch('/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const responseData = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(responseData.error || 'Submission failed');
-        }
-
-        showResult(
-          `## 🎉 Quiz Completed, ${playerName}!\n\n**Your Score: ${score} / ${QUIZ_DATA.length}**\n\n📊 Score saved successfully!`,
-          'success'
-        );
-      } catch (error) {
-        showResult(
-          `## 🎉 Quiz Completed, ${playerName}!\n\n**Your Score: ${score} / ${QUIZ_DATA.length}**\n\n⚠️ Quiz completed, but the backend is not responding correctly.`,
-          'error'
-        );
-      }
-    });
-
-    function showResult(message, type) {
-      resultBox.className = `result visible ${type}`;
-      resultBox.innerHTML = `<h3>Result</h3><p>${message.replace(/\n/g, '<br>')}</p>`;
-    }
-  </script>
 </body>
 </html>
