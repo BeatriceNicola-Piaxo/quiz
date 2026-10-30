@@ -1,5 +1,6 @@
 import os
 import json
+import random
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -11,6 +12,40 @@ BASE_DIR = Path(__file__).resolve().parent
 RESULTS_FILE = BASE_DIR / "results.json"
 GOOGLE_SHEET_ID = os.environ.get("GOOGLE_SHEET_ID")
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+
+QUESTION_POOL = [
+    {
+        "question": "Which platform are we using to host this quiz cleanly?",
+        "options": ["Render", "Hugging Face", "GitHub Pages"],
+        "answer": "GitHub Pages",
+    },
+    {
+        "question": "Where are the results being saved?",
+        "options": ["Local File", "Cloud Spreadsheet", "Nowhere"],
+        "answer": "Cloud Spreadsheet",
+    },
+    {
+        "question": "What technology is used to serve the web app?",
+        "options": ["Flask", "Django", "FastAPI"],
+        "answer": "Flask",
+    },
+    {
+        "question": "Which data source stores the submitted quiz results?",
+        "options": ["Google Sheets", "MySQL", "CSV file"],
+        "answer": "Google Sheets",
+    },
+    {
+        "question": "What is the expected format of the score submitted to the backend?",
+        "options": ["A percentage", "A string like '3 / 5'", "A boolean"],
+        "answer": "A string like '3 / 5'",
+    },
+    {
+        "question": "Which HTML element is commonly used to collect a single answer from a user?",
+        "options": ["<select>", "<input type='radio'>", "<textarea>"],
+        "answer": "<input type='radio'>",
+    },
+]
+QUESTION_COUNT = 5
 
 app = Flask(__name__)
 
@@ -47,7 +82,17 @@ def quiz_page():
     if not name or not email or not phone:
         return redirect(url_for("index"))
 
-    return render_template("quiz.html", name=name, email=email, phone=phone)
+    selected_questions = random.sample(
+        QUESTION_POOL,
+        k=min(len(QUESTION_POOL), QUESTION_COUNT),
+    )
+    return render_template(
+        "quiz.html",
+        name=name,
+        email=email,
+        phone=phone,
+        questions=selected_questions,
+    )
 
 
 @app.get("/health")
