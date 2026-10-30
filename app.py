@@ -52,14 +52,14 @@ QUESTION_POOLS = {
         {"id": "cx_3", "question": "Which metric helps measure how quickly a company responds to customers?", "options": ["Response time", "Inventory count", "Operating margin"], "answer": "Response time"},
         {"id": "cx_4", "question": "What is a common goal of customer support?", "options": ["Resolve problems efficiently and politely", "Train employees for sales", "Increase manufacturing speed"], "answer": "Resolve problems efficiently and politely"},
         {"id": "cx_5", "question": "Which experience element is most directly tied to customer satisfaction?", "options": ["Service quality", "Office layout", "Accounting rules"], "answer": "Service quality"},
-        {"id": "cx_6", "question": "What is the benefit of personalization in customer experience?", "options": ["It makes interactions more relevant and effective", "It shortens product lines", "It eliminates customer service"], "answer": "It makes interactions more relevant and effective"},
+        {"id": "cx_6", "question": "What is the benefit of personalization in customer experience?", "options": ["It makes interactions more relevant and effective", "It shortens product lines", "It lowers staff pay"], "answer": "It makes interactions more relevant and effective"},
     ],
     "Strategy & Leadership": [
         {"id": "strategy_1", "question": "What is a business strategy?", "options": ["A plan to achieve long-term goals", "A list of employees", "A monthly budget"], "answer": "A plan to achieve long-term goals"},
         {"id": "strategy_2", "question": "Why do companies use KPIs?", "options": ["To measure progress toward goals", "To create product designs", "To assign office chairs"], "answer": "To measure progress toward goals"},
-        {"id": "strategy_3", "question": "What does stakeholder management focus on?", "options": ["Balancing interests of people affected by the business", "Reducing product inventory", "Writing technical manuals"], "answer": "Balancing interests of people affected by the business"},
+        {"id": "strategy_3", "question": "What does stakeholder management focus on?", "options": ["Balancing interests of people affected by the business", "Reducing product inventory", "Writing invoices"], "answer": "Balancing interests of people affected by the business"},
         {"id": "strategy_4", "question": "Which skill is most important for effective leadership?", "options": ["Decision-making", "Data entry", "Inventory counting"], "answer": "Decision-making"},
-        {"id": "strategy_5", "question": "What is the purpose of a SWOT analysis?", "options": ["To evaluate strengths, weaknesses, opportunities and threats", "To calculate payroll", "To track customer orders"], "answer": "To evaluate strengths, weaknesses, opportunities and threats"},
+        {"id": "strategy_5", "question": "What is the purpose of a SWOT analysis?", "options": ["To evaluate strengths, weaknesses, opportunities and threats", "To calculate payroll", "To track customer calls"], "answer": "To evaluate strengths, weaknesses, opportunities and threats"},
         {"id": "strategy_6", "question": "What does prioritization help a team do?", "options": ["Focus on the most important work first", "Increase office noise", "Reduce meeting time only"], "answer": "Focus on the most important work first"},
     ],
 }
@@ -109,6 +109,40 @@ def ensure_headers(sheet):
         sheet.delete_row(2)
 
 
+def save_quiz_result(name, email, phone, score):
+    if not name or not email or not phone or not score:
+        raise ValueError("Missing required fields: name, email, phone and score")
+
+    submitted_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+    results = []
+    if RESULTS_FILE.exists():
+        try:
+            with RESULTS_FILE.open("r", encoding="utf-8") as file:
+                existing_results = json.load(file)
+            if isinstance(existing_results, list):
+                results = existing_results
+        except (json.JSONDecodeError, OSError):
+            results = []
+
+    results.append({
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "score": score,
+        "submitted_at": submitted_at,
+    })
+
+    with RESULTS_FILE.open("w", encoding="utf-8") as file:
+        json.dump(results, file, ensure_ascii=False, indent=2)
+
+    if not GOOGLE_SHEET_ID:
+        raise ValueError("GOOGLE_SHEET_ID is not set")
+
+    sheet = get_sheet()
+    ensure_headers(sheet)
+    sheet.append_row([name, email, phone, score, submitted_at])
+
+
 @app.get("/")
 def index():
     return render_template("index.html")
@@ -126,6 +160,8 @@ def quiz_start():
     session["participant"] = {"name": name, "email": email, "phone": phone}
     session["quiz_state"] = build_category_quiz()
     session["scores"] = {}
+    session["result_saved"] = False
+    session["save_error"] = None
     return redirect(url_for("quiz_category_page", page_num=0))
 
 
@@ -182,6 +218,22 @@ def submit_quiz_page():
     if page_num < len(quiz_state) - 1:
         return redirect(url_for("quiz_category_page", page_num=page_num + 1))
 
+    total_score = 0
+    total_questions = 0
+    for index, category_page in enumerate(quiz_state):
+        score_data = session_scores.get(str(index), {})
+        total_score += score_data.get("score", 0)
+        total_questions += score_data.get("total_questions", len(category_page["questions"]))
+
+    final_score = f"{total_score} / {total_questions}"
+    try:
+        save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score)
+        session["result_saved"] = True
+        session["save_error"] = None
+    except Exception as exc:
+        session["result_saved"] = False
+        session["save_error"] = str(exc)
+
     return redirect(url_for("quiz_results"))
 
 
@@ -209,6 +261,16 @@ def quiz_results():
         total_score += score
         total_questions += page_total
 
+    if not session.get("result_saved"):
+        final_score = f"{total_score} / {total_questions}"
+        try:
+            save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score)
+            session["result_saved"] = True
+            session["save_error"] = None
+        except Exception as exc:
+            session["result_saved"] = False
+            session["save_error"] = str(exc)
+
     return render_template(
         "results.html",
         name=participant["name"],
@@ -217,6 +279,7 @@ def quiz_results():
         category_scores=category_scores,
         total_score=total_score,
         total_questions=total_questions,
+        save_error=session.get("save_error"),
     )
 
 
@@ -233,31 +296,8 @@ def submit_score():
     phone = str(payload.get("phone") or "").strip()
     score = str(payload.get("score") or "").strip()
 
-    if not name or not email or not phone or not score:
-        return jsonify({"error": "Missing required fields: name, email, phone and score"}), 400
-
-    results = []
-    if RESULTS_FILE.exists():
-        try:
-            with RESULTS_FILE.open("r", encoding="utf-8") as file:
-                existing_results = json.load(file)
-            if isinstance(existing_results, list):
-                results = existing_results
-        except (json.JSONDecodeError, OSError):
-            results = []
-
-    results.append({"name": name, "score": score})
-
-    with RESULTS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(results, file, ensure_ascii=False, indent=2)
-
     try:
-        if not GOOGLE_SHEET_ID:
-            raise ValueError("GOOGLE_SHEET_ID is not set")
-        sheet = get_sheet()
-        ensure_headers(sheet)
-        submitted_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
-        sheet.append_row([name, email, phone, score, submitted_at])
+        save_quiz_result(name, email, phone, score)
     except Exception as exc:
         return jsonify({"error": f"Failed to save to Google Sheet: {exc}"}), 500
 
