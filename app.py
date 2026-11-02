@@ -15,12 +15,16 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 QUESTION_POOLS = {
     "Hardware": [
-        {"id": "hw_1", "question": "Which protocol is commonly used to transfer data securely over the web?", "options": ["HTTP", "HTTPS", "FTP"], "answer": "HTTPS"},
-        {"id": "hw_2", "question": "Which language is commonly used to style a web page?", "options": ["HTML", "CSS", "Python"], "answer": "CSS"},
-        {"id": "hw_3", "question": "What is the name of the Python framework commonly used for lightweight web apps?", "options": ["Flask", "Django", "FastAPI"], "answer": "Flask"},
-        {"id": "hw_4", "question": "Which storage solution is often used for spreadsheet-style data in the cloud?", "options": ["Google Sheets", "MongoDB", "SQLite"], "answer": "Google Sheets"},
-        {"id": "hw_5", "question": "What does API stand for?", "options": ["Application Programming Interface", "Automated Program Integration", "Application Process Index"], "answer": "Application Programming Interface"},
-        {"id": "hw_6", "question": "Which HTML element is usually used to create a clickable button?", "options": ["<button>", "<link>", "<input>"], "answer": "<button>"},
+        {"id": "hw_1", "question": "What does LED stand for?", "options": ["Light Emitting Diode", "Low Energy Device", "Light Electronic Driver"], "answer": "Light Emitting Diode"},
+        {"id": "hw_2", "question": "What is the nominal voltage of a single Lithium-Ion cell used in many battery packs?", "options": ["1.5 V", "3.6-3.7 V", "12 V"], "answer": "3.6-3.7 V"},
+        {"id": "hw_3", "question": "What is the primary purpose of a BMU (Battery Management Unit)?", "options": ["Increase motor power", "Play warning sounds", "Monitor and protect the battery system"], "answer": "Monitor and protect the battery system"},
+        {"id": "hw_4", "question": "Why are two 120 Ω termination resistors typically used on a CAN bus?", "options": ["To increase current capacity", "To reduce power consumption", "To match cable impedance and reduce signal reflections"], "answer": "To match cable impedance and reduce signal reflections"},
+        {"id": "hw_5", "question": "A battery pack consists of 8 Li-Ion cells connected in series. Each cell is at 3.7 V. What is the pack voltage?", "options": ["8.0 V", "14.8 V", "29.6 V"], "answer": "29.6 V"},
+        {"id": "hw_6", "question": "What happens when batteries are connected in series?", "options": ["Capacity increases, voltage stays the same", "Voltage increases, capacity stays approximately the same", "Both voltage and capacity double"], "answer": "Voltage increases, capacity stays approximately the same"},
+        {"id": "hw_7", "question": "What does a fuse primarily protect against?", "options": ["High temperature only", "Excessive current", "Low battery voltage"], "answer": "Excessive current"},
+        {"id": "hw_8", "question": "Which sensor is most commonly used by a BMU to prevent battery overheating?", "options": ["Pressure sensor", "Humidity sensor", "Temperature sensor"], "answer": "Temperature sensor"},
+        {"id": "hw_9", "question": "Why is cell balancing used in a battery pack?", "options": ["To make the battery heavier", "To ensure all cells maintain a similar state of charge", "To increase CAN bus speed"], "answer": "To ensure all cells maintain a similar state of charge"},
+        {"id": "hw_10", "question": "A BMU detects that one cell voltage exceeds the maximum allowed limit. What should happen?", "options": ["Ignore it if only one cell is affected", "Increase charging current", "Take protective action such as stopping charging or disconnecting the battery"], "answer": "Take protective action such as stopping charging or disconnecting the battery"},
     ],
     "Software": [
         {"id": "sw_1", "question": 'What is the effect of the "break" statement when it is used inside a "for" loop?', "options": ["It immediately terminates the execution of the for loop and continues with the next statement after the loop.", "It exits the program completely.", "It skips the current iteration and continues the loop."], "answer": "It skips the current iteration and continues the loop."},
