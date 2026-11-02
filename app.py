@@ -23,17 +23,17 @@ QUESTION_POOLS = {
         {"id": "hw_6", "question": "Which HTML element is usually used to create a clickable button?", "options": ["<button>", "<link>", "<input>"], "answer": "<button>"},
     ],
     "Software": [
-        {"id": "sw_1", "question": 'What is the effect of the "break" statement when it is used inside a "for" loop?', "options": ["It immediately terminates the execution of the for loop and continues the program with the statement that follows it.", "It jumps directly to the next iteration of the loop, ignoring the rest of the current loop body.", "It completely stops the execution of the C program."], "answer": "It immediately terminates the execution of the for loop and continues the program with the statement that follows it."},
+        {"id": "sw_1", "question": 'What is the effect of the "break" statement when it is used inside a "for" loop?', "options": ["It immediately terminates the execution of the for loop and continues with the next statement after the loop.", "It exits the program completely.", "It skips the current iteration and continues the loop."], "answer": "It skips the current iteration and continues the loop."},
         {"id": "sw_2", "question": "Which operator is used to set bit 3 of a register?", "options": ["reg |= (1 << 3);", "reg &= (1 << 3);", "reg ^= (1 << 3);"], "answer": "reg |= (1 << 3);"},
         {"id": "sw_3", "question": "What is the result of the expression below?\n\nuint8_t x = 0x55;\nx ^= 0xFF;", "options": ["0x00", "0xAA", "0x55"], "answer": "0xAA"},
         {"id": "sw_4", "question": "Which statement about stack usage in embedded systems is true?", "options": ["Stack size is unlimited", "Stack overflow cannot occur in C", "Recursion may cause stack overflow"], "answer": "Recursion may cause stack overflow"},
-        {"id": "sw_5", "question": "What is the primary purpose of a Watchdog Timer (WDT)?", "options": ["Measure execution time of Watchdog runnables", "Manage the timer used by the Watchdog SW driver", "Reset the system if software becomes unresponsive"], "answer": "Reset the system if software becomes unresponsive"},
+        {"id": "sw_5", "question": "What is the primary purpose of a Watchdog Timer (WDT)?", "options": ["Measure execution time of Watchdog runnables", "Manage the timer used by the Watchdog SW driver", "Control the I/O pins of the MCU"], "answer": "Manage the timer used by the Watchdog SW driver"},
         {"id": "sw_6", "question": "What is the value of x after executing the code?\n\nuint8_t x = 0x0F;\nx <<= 2;", "options": ["0x11", "0x3C", "0xF0"], "answer": "0x3C"},
         {"id": "sw_7", "question": "Which operation clears bit 5 in a register?", "options": ["reg |= (1 << 5);", "reg ^= (1 << 5);", "reg &= ~(1 << 5);"], "answer": "reg &= ~(1 << 5);"},
         {"id": "sw_8", "question": 'What is the output?\n\nuint8_t a = 5;\nuint8_t b = 3;\n\nprintf("%d", a & b);', "options": ["1", "7", "8"], "answer": "1"},
         {"id": "sw_9", "question": "What does this code do?\n\nuint32_t timeout = 1000;\n\nwhile(timeout--)\n{\n}", "options": ["Infinite loop", "Busy wait delay loop", "Memory initialization"], "answer": "Busy wait delay loop"},
-        {"id": "sw_10", "question": "Which is generally safer for embedded safety-critical systems?", "options": ["Dynamic memory allocation during runtime", "Static memory allocation determined at compile time", "Safe malloc / free functions"], "answer": "Static memory allocation determined at compile time"},
-        {"id": "sw_11", "question": 'What is wrong with the following code?\n\nchar *str;\n\nstrcpy(str, "Hello");', "options": ["Nothing - the code is correct", "str does not point to valid memory", "Missing volatile keyword for str"], "answer": "str does not point to valid memory"},
+        {"id": "sw_10", "question": "Which is generally safer for embedded safety-critical systems?", "options": ["Dynamic memory allocation during runtime", "Static memory allocation determined at compile time", "Using recursion everywhere"], "answer": "Static memory allocation determined at compile time"},
+        {"id": "sw_11", "question": 'What is wrong with the following code?\n\nchar *str;\n\nstrcpy(str, "Hello");', "options": ["Nothing - the code is correct", "str does not point to valid memory before copying into it.", "The code is not valid C syntax."], "answer": "str does not point to valid memory before copying into it."},
     ],
     "FuSa": [
         {"id": "fusa_1", "question": "What does ROI stand for?", "options": ["Return on Investment", "Rate of Income", "Revenue over Inventory"], "answer": "Return on Investment"},
@@ -44,11 +44,11 @@ QUESTION_POOLS = {
         {"id": "fusa_6", "question": "What is a fixed cost?", "options": ["A cost that stays fairly constant over time", "A one-time sale", "A customer refund"], "answer": "A cost that stays fairly constant over time"},
     ],
     "Cyber Security": [
-        {"id": "cyber_1", "question": "What is the main difference between encryption and hashing?", "options": ["Encryption is only used for passwords, while hashing is used for files.", "Encryption is designed to be reversible with the correct key, while hashing is designed to be one-way.", "Hashing is a stronger form of encryption that does not require a key."], "answer": "Encryption is designed to be reversible with the correct key, while hashing is designed to be one-way."},
-        {"id": "cyber_2", "question": "In symmetric encryption, what is used to encrypt and decrypt the data?", "options": ["Two completely unrelated passwords.", "The same secret key.", "No key is required."], "answer": "The same secret key."},
+        {"id": "cyber_1", "question": "What is the main difference between encryption and hashing?", "options": ["Encryption is only used for passwords, while hashing is used for files.", "Encryption is reversible; hashing is designed to be one-way.", "Hashing is more secure than encryption."], "answer": "Encryption is reversible; hashing is designed to be one-way."},
+        {"id": "cyber_2", "question": "In symmetric encryption, what is used to encrypt and decrypt the data?", "options": ["Two completely unrelated passwords.", "The same secret key.", "No key is needed."], "answer": "The same secret key."},
         {"id": "cyber_3", "question": "In asymmetric cryptography, which keys are normally used?", "options": ["Two public keys.", "A public key and a private key.", "One password and one username."], "answer": "A public key and a private key."},
-        {"id": "cyber_4", "question": "Which statement best describes a cryptographic hash function such as SHA-256?", "options": ["It encrypts information that can later be decrypted.", "It creates a fixed-size digest from input data and is designed to be one-way.", "It generates a public/private key pair."], "answer": "It creates a fixed-size digest from input data and is designed to be one-way."},
-        {"id": "cyber_5", "question": "What can a digital signature primarily help verify?", "options": ["That file has been encrypted.", "That nobody is able to copy the file.", "The authenticity and integrity of the signed data."], "answer": "The authenticity and integrity of the signed data."},
+        {"id": "cyber_4", "question": "Which statement best describes a cryptographic hash function such as SHA-256?", "options": ["It encrypts information that can later be decrypted.", "It creates a fixed-length digest from input data, which is hard to reverse.", "It stores passwords in plaintext."], "answer": "It creates a fixed-length digest from input data, which is hard to reverse."},
+        {"id": "cyber_5", "question": "What can a digital signature primarily help verify?", "options": ["That file has been encrypted.", "That nobody is able to copy the file.", "The authenticity and integrity of a message or document."], "answer": "The authenticity and integrity of a message or document."},
     ],
     "System": [
         {"id": "sys_1", "question": "What does NPS stand for?", "options": ["Net Promoter Score", "New Product Survey", "Network Performance Standard"], "answer": "Net Promoter Score"},
@@ -56,19 +56,19 @@ QUESTION_POOLS = {
         {"id": "sys_3", "question": "Which metric helps measure how quickly a company responds to customers?", "options": ["Response time", "Inventory count", "Operating margin"], "answer": "Response time"},
         {"id": "sys_4", "question": "What is a common goal of customer support?", "options": ["Resolve problems efficiently and politely", "Train employees for sales", "Increase manufacturing speed"], "answer": "Resolve problems efficiently and politely"},
         {"id": "sys_5", "question": "Which experience element is most directly tied to customer satisfaction?", "options": ["Service quality", "Office layout", "Accounting rules"], "answer": "Service quality"},
-        {"id": "sys_6", "question": "What is the benefit of personalization in customer experience?", "options": ["It makes interactions more relevant and effective", "It shortens product lines", "It lowers staff pay"], "answer": "It makes interactions more relevant and effective"},
+        {"id": "sys_6", "question": "What is the benefit of personalization in customer experience?", "options": ["It makes interactions more relevant and effective", "It shortens product lines", "It removes paperwork"], "answer": "It makes interactions more relevant and effective"},
     ],
     "Quality": [
-        {"id": "q_1", "question": 'What does "quality" mean for a product or service?', "options": ["To be the most expensive", "To fulfill the client's requirements and expectations", "To receive no complaints"], "answer": "To fulfill the client's requirements and expectations"},
-        {"id": "q_2", "question": "You find a problem in a product. What is the best approach?", "options": ["If the client didn't notice it, you ignore it", "You quickly fix it without looking for the root cause", "You identify the root cause, then take the appropiate measures to prevent it"], "answer": "You identify the root cause, then take the appropiate measures to prevent it"},
+        {"id": "q_1", "question": 'What does "quality" mean for a product or service?', "options": ["To be the most expensive", "To fulfill the client's requirements and expectations", "To receive the highest number of likes"], "answer": "To fulfill the client's requirements and expectations"},
+        {"id": "q_2", "question": "You find a problem in a product. What is the best approach?", "options": ["If the client didn't notice it, you ignore it", "You quickly fix it without looking for the root cause", "You investigate the issue, identify the root cause and correct it"], "answer": "You investigate the issue, identify the root cause and correct it"},
         {"id": "q_3", "question": "Who is responsible for quality in an organisation?", "options": ["Only the Quality department", "Managers only", "Everyone involved in developing the product or service"], "answer": "Everyone involved in developing the product or service"},
         {"id": "q_4", "question": "What is more efficient?", "options": ["To detect the defects at the end", "To prevent the appearance of defects", "To repair the product after delivery"], "answer": "To prevent the appearance of defects"},
         {"id": "q_5", "question": "Why it's important to find the cause of a problem?", "options": ["To idenitfy the responsible person", "To prevent it's reoccurence", "To fill in a report"], "answer": "To prevent it's reoccurence"},
-        {"id": "q_6", "question": "A client reports a problem that appears very rearly. What should we do?", "options": ["Ignore it because it's rare", "Investigate the problem and the associated risk", "Wait for it to happen again"], "answer": "Investigate the problem and the associated risk"},
-        {"id": "q_7", "question": "Which of the following is an example of continuous improvement?", "options": ["Repeating the same method regardless of the results", "Analyse the results and improve the way of work", "Changing the process every week"], "answer": "Analyse the results and improve the way of work"},
-        {"id": "q_8", "question": "Why clear requirements are important to have before developing a product?", "options": ["They reduce the risk of misunderstandings and errors", "They completely eliminate the need for testing", "The product will automatically be cheaper"], "answer": "They reduce the risk of misunderstandings and errors"},
-        {"id": "q_9", "question": "A product passes all the defined tests. Does this automatically mean it is qualitative?", "options": ["Yes, always", "Not necessarily. Tests must cover all requirements and relevant use cases", "Yes, if testing was fast"], "answer": "Not necessarily. Tests must cover all requirements and relevant use cases"},
-        {"id": "q_10", "question": "Which statement best describes quality culture?", "options": ["Quality will find all problems", "If it works, there's no need for quality checks", "Each of us contributes to problem prevention and product improvement"], "answer": "Each of us contributes to problem prevention and product improvement"},
+        {"id": "q_6", "question": "A client reports a problem that appears very rearly. What should we do?", "options": ["Ignore it because it's rare", "Investigate the problem and the associated causes", "Tell the client it is not a quality issue"], "answer": "Investigate the problem and the associated causes"},
+        {"id": "q_7", "question": "Which of the following is an example of continuous improvement?", "options": ["Repeating the same method regardless of the results", "Analyse the results and improve the process", "Only changing the product after a complaint"], "answer": "Analyse the results and improve the process"},
+        {"id": "q_8", "question": "Why clear requirements are important to have before developing a product?", "options": ["They reduce the risk of misunderstandings and errors", "They completely replace testing", "They are only useful for the sales team"], "answer": "They reduce the risk of misunderstandings and errors"},
+        {"id": "q_9", "question": "A product passes all the defined tests. Does this automatically mean it is qualitative?", "options": ["Yes, always", "Not necessarily. Tests must cover all requirements and quality criteria", "No, quality is only reported by the customer"], "answer": "Not necessarily. Tests must cover all requirements and quality criteria"},
+        {"id": "q_10", "question": "Which statement best describes quality culture?", "options": ["Quality will find all problems", "If it works, there's no need for quality checks", "Each of us contributes to quality and prevention"], "answer": "Each of us contributes to quality and prevention"},
     ],
 }
 
@@ -99,6 +99,16 @@ def get_quiz_session():
     return participant, quiz_state
 
 
+def get_category_summary(session_scores, quiz_state):
+    category_scores = {}
+    for index, page in enumerate(quiz_state):
+        score_data = session_scores.get(str(index), {})
+        score = score_data.get("score", 0)
+        page_total = score_data.get("total_questions", len(page["questions"]))
+        category_scores[page["category"]] = f"{score}/{page_total}"
+    return category_scores
+
+
 def get_sheet():
     creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
     if not creds_path:
@@ -110,14 +120,25 @@ def get_sheet():
 
 
 def ensure_headers(sheet):
-    if not sheet.row_values(1):
-        sheet.append_row(["name", "email", "phone", "score", "submitted_at"])
-    elif sheet.row_values(1) != ["name", "email", "phone", "score", "submitted_at"]:
-        sheet.insert_row(["name", "email", "phone", "score", "submitted_at"], 1)
-        sheet.delete_row(2)
+    expected_headers = ["name", "email", "phone", "score", "category_scores", "submitted_at"]
+    current_headers = sheet.row_values(1)
+
+    if not current_headers:
+        sheet.append_row(expected_headers)
+        return
+
+    if current_headers == expected_headers:
+        return
+
+    if current_headers == ["name", "email", "phone", "score", "submitted_at"]:
+        sheet.insert_cols(5, 1)
+        sheet.update_cell(1, 5, "category_scores")
+        return
+
+    sheet.append_row(expected_headers)
 
 
-def save_quiz_result(name, email, phone, score):
+def save_quiz_result(name, email, phone, score, category_scores=None):
     if not name or not email or not phone or not score:
         raise ValueError("Missing required fields: name, email, phone and score")
 
@@ -132,13 +153,21 @@ def save_quiz_result(name, email, phone, score):
         except (json.JSONDecodeError, OSError):
             results = []
 
-    results.append({
+    normalized_category_scores = {}
+    if isinstance(category_scores, dict):
+        normalized_category_scores = {str(key): str(value) for key, value in category_scores.items()}
+    elif category_scores is not None:
+        normalized_category_scores = {"summary": str(category_scores)}
+
+    result_entry = {
         "name": name,
         "email": email,
         "phone": phone,
         "score": score,
+        "category_scores": normalized_category_scores,
         "submitted_at": submitted_at,
-    })
+    }
+    results.append(result_entry)
 
     with RESULTS_FILE.open("w", encoding="utf-8") as file:
         json.dump(results, file, ensure_ascii=False, indent=2)
@@ -148,7 +177,7 @@ def save_quiz_result(name, email, phone, score):
 
     sheet = get_sheet()
     ensure_headers(sheet)
-    sheet.append_row([name, email, phone, score, submitted_at])
+    sheet.append_row([name, email, phone, score, json.dumps(normalized_category_scores, ensure_ascii=False), submitted_at])
 
 
 @app.get("/")
@@ -234,8 +263,9 @@ def submit_quiz_page():
         total_questions += score_data.get("total_questions", len(category_page["questions"]))
 
     final_score = f"{total_score} / {total_questions}"
+    category_scores = get_category_summary(session_scores, quiz_state)
     try:
-        save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score)
+        save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score, category_scores)
         session["result_saved"] = True
         session["save_error"] = None
     except Exception as exc:
@@ -272,7 +302,7 @@ def quiz_results():
     if not session.get("result_saved"):
         final_score = f"{total_score} / {total_questions}"
         try:
-            save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score)
+            save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score, get_category_summary(session_scores, quiz_state))
             session["result_saved"] = True
             session["save_error"] = None
         except Exception as exc:
@@ -303,9 +333,10 @@ def submit_score():
     email = str(payload.get("email") or "").strip()
     phone = str(payload.get("phone") or "").strip()
     score = str(payload.get("score") or "").strip()
+    category_scores = payload.get("category_scores") or payload.get("categories") or {}
 
     try:
-        save_quiz_result(name, email, phone, score)
+        save_quiz_result(name, email, phone, score, category_scores)
     except Exception as exc:
         return jsonify({"error": f"Failed to save to Google Sheet: {exc}"}), 500
 
@@ -313,6 +344,7 @@ def submit_score():
         "message": "Score saved successfully",
         "name": name,
         "score": score,
+        "category_scores": category_scores,
     })
 
 
