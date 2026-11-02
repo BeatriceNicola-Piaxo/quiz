@@ -74,6 +74,7 @@ QUESTION_POOLS = {
 
 QUESTION_COUNT_PER_CATEGORY = 3
 CATEGORY_ORDER = list(QUESTION_POOLS.keys())
+CATEGORY_RESULT_HEADERS = ["name", "email", "phone", "score"] + CATEGORY_ORDER + ["submitted_at"]
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "quiz-secret-key")
@@ -109,6 +110,17 @@ def get_category_summary(session_scores, quiz_state):
     return category_scores
 
 
+def normalize_category_scores(category_scores):
+    normalized = {}
+    for category in CATEGORY_ORDER:
+        value = category_scores.get(category) if isinstance(category_scores, dict) else None
+        if value is None:
+            normalized[category] = "0/0"
+        else:
+            normalized[category] = str(value)
+    return normalized
+
+
 def get_sheet():
     creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
     if not creds_path:
@@ -120,22 +132,31 @@ def get_sheet():
 
 
 def ensure_headers(sheet):
-    expected_headers = ["name", "email", "phone", "score", "category_scores", "submitted_at"]
     current_headers = sheet.row_values(1)
 
     if not current_headers:
-        sheet.append_row(expected_headers)
+        sheet.append_row(CATEGORY_RESULT_HEADERS)
         return
 
-    if current_headers == expected_headers:
+    if current_headers == CATEGORY_RESULT_HEADERS:
         return
 
-    if current_headers == ["name", "email", "phone", "score", "submitted_at"]:
-        sheet.insert_cols(5, 1)
-        sheet.update_cell(1, 5, "category_scores")
+    legacy_headers = ["name", "email", "phone", "score", "submitted_at"]
+    legacy_json_headers = ["name", "email", "phone", "score", "category_scores", "submitted_at"]
+
+    if current_headers == legacy_headers or current_headers == legacy_json_headers:
+        sheet.insert_cols(5, len(CATEGORY_ORDER))
+        sheet.update("A1", [CATEGORY_RESULT_HEADERS])
         return
 
-    sheet.append_row(expected_headers)
+    if current_headers[:4] == ["name", "email", "phone", "score"]:
+        for header in CATEGORY_ORDER:
+            if header not in current_headers:
+                sheet.insert_cols(len(current_headers) + 1, 1)
+                sheet.update_cell(1, len(current_headers) + 1, header)
+        return
+
+    sheet.append_row(CATEGORY_RESULT_HEADERS)
 
 
 def save_quiz_result(name, email, phone, score, category_scores=None):
@@ -153,12 +174,7 @@ def save_quiz_result(name, email, phone, score, category_scores=None):
         except (json.JSONDecodeError, OSError):
             results = []
 
-    normalized_category_scores = {}
-    if isinstance(category_scores, dict):
-        normalized_category_scores = {str(key): str(value) for key, value in category_scores.items()}
-    elif category_scores is not None:
-        normalized_category_scores = {"summary": str(category_scores)}
-
+    normalized_category_scores = normalize_category_scores(category_scores or {})
     result_entry = {
         "name": name,
         "email": email,
@@ -177,7 +193,10 @@ def save_quiz_result(name, email, phone, score, category_scores=None):
 
     sheet = get_sheet()
     ensure_headers(sheet)
-    sheet.append_row([name, email, phone, score, json.dumps(normalized_category_scores, ensure_ascii=False), submitted_at])
+    row = [name, email, phone, score]
+    row.extend(normalized_category_scores.get(category, "0/0") for category in CATEGORY_ORDER)
+    row.append(submitted_at)
+    sheet.append_row(row)
 
 
 @app.get("/")
@@ -344,7 +363,7 @@ def submit_score():
         "message": "Score saved successfully",
         "name": name,
         "score": score,
-        "category_scores": category_scores,
+        "category_scores": normalize_category_scores(category_scores),
     })
 
 
