@@ -74,7 +74,7 @@ QUESTION_POOLS = {
 
 QUESTION_COUNT_PER_CATEGORY = 3
 CATEGORY_ORDER = list(QUESTION_POOLS.keys())
-CATEGORY_RESULT_HEADERS = ["name", "email", "phone", "score"] + CATEGORY_ORDER + ["submitted_at"]
+CATEGORY_RESULT_HEADERS = ["name", "email", "phone", "score"] + CATEGORY_ORDER + ["answers", "submitted_at"]
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "quiz-secret-key")
@@ -121,6 +121,15 @@ def normalize_category_scores(category_scores):
     return normalized
 
 
+def normalize_question_answers(question_answers):
+    normalized = {}
+    if not isinstance(question_answers, dict):
+        return normalized
+    for key, value in question_answers.items():
+        normalized[str(key)] = str(value)
+    return normalized
+
+
 def get_sheet():
     creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
     if not creds_path:
@@ -145,21 +154,20 @@ def ensure_headers(sheet):
     legacy_json_headers = ["name", "email", "phone", "score", "category_scores", "submitted_at"]
 
     if current_headers == legacy_headers or current_headers == legacy_json_headers:
-        sheet.insert_cols(5, len(CATEGORY_ORDER))
+        sheet.clear()
         sheet.update("A1", [CATEGORY_RESULT_HEADERS])
         return
 
     if current_headers[:4] == ["name", "email", "phone", "score"]:
-        for header in CATEGORY_ORDER:
-            if header not in current_headers:
-                sheet.insert_cols(len(current_headers) + 1, 1)
-                sheet.update_cell(1, len(current_headers) + 1, header)
+        sheet.clear()
+        sheet.update("A1", [CATEGORY_RESULT_HEADERS])
         return
 
-    sheet.append_row(CATEGORY_RESULT_HEADERS)
+    sheet.clear()
+    sheet.update("A1", [CATEGORY_RESULT_HEADERS])
 
 
-def save_quiz_result(name, email, phone, score, category_scores=None):
+def save_quiz_result(name, email, phone, score, category_scores=None, question_answers=None):
     if not name or not email or not phone or not score:
         raise ValueError("Missing required fields: name, email, phone and score")
 
@@ -175,12 +183,14 @@ def save_quiz_result(name, email, phone, score, category_scores=None):
             results = []
 
     normalized_category_scores = normalize_category_scores(category_scores or {})
+    normalized_question_answers = normalize_question_answers(question_answers)
     result_entry = {
         "name": name,
         "email": email,
         "phone": phone,
         "score": score,
         "category_scores": normalized_category_scores,
+        "question_answers": normalized_question_answers,
         "submitted_at": submitted_at,
     }
     results.append(result_entry)
@@ -195,6 +205,7 @@ def save_quiz_result(name, email, phone, score, category_scores=None):
     ensure_headers(sheet)
     row = [name, email, phone, score]
     row.extend(normalized_category_scores.get(category, "0/0") for category in CATEGORY_ORDER)
+    row.append(json.dumps(normalized_question_answers, ensure_ascii=False))
     row.append(submitted_at)
     sheet.append_row(row)
 
@@ -216,6 +227,7 @@ def quiz_start():
     session["participant"] = {"name": name, "email": email, "phone": phone}
     session["quiz_state"] = build_category_quiz()
     session["scores"] = {}
+    session["answers"] = {}
     session["result_saved"] = False
     session["save_error"] = None
     return redirect(url_for("quiz_category_page", page_num=0))
@@ -258,10 +270,16 @@ def submit_quiz_page():
 
     page = quiz_state[page_num]
     score = 0
+    page_answers = {}
     for question in page["questions"]:
         selected_answer = request.form.get(f"q_{question['id']}")
+        page_answers[question["id"]] = selected_answer
         if selected_answer == question["answer"]:
             score += 1
+
+    session_answers = session.get("answers", {})
+    session_answers.update(page_answers)
+    session["answers"] = session_answers
 
     session_scores = session.get("scores", {})
     session_scores[str(page_num)] = {
@@ -284,7 +302,7 @@ def submit_quiz_page():
     final_score = f"{total_score} / {total_questions}"
     category_scores = get_category_summary(session_scores, quiz_state)
     try:
-        save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score, category_scores)
+        save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score, category_scores, session.get("answers", {}))
         session["result_saved"] = True
         session["save_error"] = None
     except Exception as exc:
@@ -305,6 +323,7 @@ def quiz_results():
     total_score = 0
     total_questions = 0
     session_scores = session.get("scores", {})
+    question_answers = session.get("answers", {})
 
     for index, page in enumerate(quiz_state):
         score_data = session_scores.get(str(index), {})
@@ -321,7 +340,7 @@ def quiz_results():
     if not session.get("result_saved"):
         final_score = f"{total_score} / {total_questions}"
         try:
-            save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score, get_category_summary(session_scores, quiz_state))
+            save_quiz_result(participant["name"], participant["email"], participant["phone"], final_score, get_category_summary(session_scores, quiz_state), question_answers)
             session["result_saved"] = True
             session["save_error"] = None
         except Exception as exc:
@@ -353,9 +372,10 @@ def submit_score():
     phone = str(payload.get("phone") or "").strip()
     score = str(payload.get("score") or "").strip()
     category_scores = payload.get("category_scores") or payload.get("categories") or {}
+    question_answers = payload.get("question_answers") or payload.get("answers") or {}
 
     try:
-        save_quiz_result(name, email, phone, score, category_scores)
+        save_quiz_result(name, email, phone, score, category_scores, question_answers)
     except Exception as exc:
         return jsonify({"error": f"Failed to save to Google Sheet: {exc}"}), 500
 
@@ -364,6 +384,7 @@ def submit_score():
         "name": name,
         "score": score,
         "category_scores": normalize_category_scores(category_scores),
+        "question_answers": normalize_question_answers(question_answers),
     })
 
 
