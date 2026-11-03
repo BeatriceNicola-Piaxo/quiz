@@ -59,13 +59,389 @@ QUESTION_POOLS = {
         {"id": "cyber_5", "question": "What can a digital signature primarily help verify?", "options": ["That file has been encrypted.", "That nobody is able to copy the file.", "The authenticity and integrity of a message or document."], "answer": "The authenticity and integrity of a message or document."},
     ],
     "System": [
-        {"id": "sys_1", "question": "What does NPS stand for?", "options": ["Net Promoter Score", "New Product Survey", "Network Performance Standard"], "answer": "Net Promoter Score"},
-        {"id": "sys_2", "question": "What is the main purpose of customer feedback?", "options": ["To understand needs and improve service", "To increase taxes", "To reduce office time"], "answer": "To understand needs and improve service"},
-        {"id": "sys_3", "question": "Which metric helps measure how quickly a company responds to customers?", "options": ["Response time", "Inventory count", "Operating margin"], "answer": "Response time"},
-        {"id": "sys_4", "question": "What is a common goal of customer support?", "options": ["Resolve problems efficiently and politely", "Train employees for sales", "Increase manufacturing speed"], "answer": "Resolve problems efficiently and politely"},
-        {"id": "sys_5", "question": "Which experience element is most directly tied to customer satisfaction?", "options": ["Service quality", "Office layout", "Accounting rules"], "answer": "Service quality"},
-        {"id": "sys_6", "question": "What is the benefit of personalization in customer experience?", "options": ["It makes interactions more relevant and effective", "It shortens product lines", "It removes paperwork"], "answer": "It makes interactions more relevant and effective"},
-    ],
+        {"id": "sys_1", "question": "What is the main purpose of system requirements?", "options": [
+            "To describe the hardware and software implementation",
+            "To define what the system must accomplish to satisfy stakeholder needs",
+            "To define the production process"
+        ],
+        "answer": "To define what the system must accomplish to satisfy stakeholder needs"
+    },
+    {
+        "id": "se_2",
+        "question": "Which of the following is a well-formulated system requirement?",
+        "options": [
+            "The battery must have high performance.",
+            "The battery shall provide a minimum of 300 A for 5 seconds at -18°C.",
+            "The battery must be robust."
+        ],
+        "answer": "The battery shall provide a minimum of 300 A for 5 seconds at -18°C."
+    },
+    {
+        "id": "se_3",
+        "question": "What does requirements traceability represent?",
+        "options": [
+            "Connecting requirements with the associated design and tests.",
+            "Numbering requirements in a document.",
+            "Storing requirements in a database."
+        ],
+        "answer": "Connecting requirements with the associated design and tests."
+    },
+    {
+        "id": "se_4",
+        "question": "Which of the following is an external interface of a 12V battery?",
+        "options": [
+            "State of Charge estimation algorithm.",
+            "CAN bus connection to the vehicle.",
+            "Balancing function."
+        ],
+        "answer": "CAN bus connection to the vehicle."
+    },
+    {
+        "id": "se_5",
+        "question": "What does system architecture describe?",
+        "options": [
+            "The structure of system elements and the relationships between them.",
+            "Only the battery electrical schematic.",
+            "Only the list of components."
+        ],
+        "answer": "The structure of system elements and the relationships between them."
+    },
+    {
+        "id": "se_6",
+        "question": "What is the purpose of Verification?",
+        "options": [
+            "To demonstrate that the system was built according to requirements.",
+            "To demonstrate that the user is satisfied.",
+            "To demonstrate the product's profitability."
+        ],
+        "answer": "To demonstrate that the system was built according to requirements."
+    },
+    {
+        "id": "se_7",
+        "question": "What is the purpose of Validation?",
+        "options": [
+            "To demonstrate that all tests have been executed.",
+            "To demonstrate that the product satisfies user needs and the operational purpose.",
+            "To demonstrate compliance with the BOM."
+        ],
+        "answer": "To demonstrate that the product satisfies user needs and the operational purpose."
+    },
+    {
+        "id": "se_8",
+        "question": "What is a system function for a 12V battery?",
+        "options": [
+            "Monitoring and reporting the State of Charge to the vehicle.",
+            "Cover fastening screw.",
+            "Upper housing."
+        ],
+        "answer": "Monitoring and reporting the State of Charge to the vehicle."
+    },
+    {
+        "id": "se_9",
+        "question": "What activity is performed during requirements allocation?",
+        "options": [
+            "Requirements are assigned to elements of the system architecture.",
+            "Requirements are deleted if they are not needed.",
+            "Requirements are transformed into manufacturing procedures."
+        ],
+        "answer": "Requirements are assigned to elements of the system architecture."
+    },
+    {
+        "id": "se_10",
+        "question": "For the requirement 'Battery shall provide State of Charge information via CAN', what must exist?",
+        "options": [
+            "An associated test or verification method.",
+            "A mechanical drawing.",
+            "A financial report."
+        ],
+        "answer": "An associated test or verification method."
+    },
+    {
+        "id": "se_11",
+        "question": "The stakeholder requirement is: 'The vehicle must be able to start under any normal operating conditions.' How should it be handled at system level?",
+        "options": [
+            "Copy it identically into the system specification.",
+            "Transform it into measurable requirements regarding voltage, SoC, and cranking capability at defined temperatures.",
+            "Transfer it directly to the hardware team."
+        ],
+        "answer": "Transform it into measurable requirements regarding voltage, SoC, and cranking capability at defined temperatures."
+    },
+    {
+        "id": "se_12",
+        "question": "Which of the following is an example of a system constraint?",
+        "options": [
+            "The battery shall communicate via CAN 2.0B because this is the vehicle interface.",
+            "The battery shall estimate SoC.",
+            "The battery shall monitor temperature.",
+            "The battery shall support Sleep mode."
+        ],
+        "answer": "The battery shall communicate via CAN 2.0B because this is the vehicle interface."
+    },
+    {
+        "id": "se_13",
+        "question": "What is the primary purpose of Requirements Allocation?",
+        "options": [
+            "Reducing production costs.",
+            "Assigning requirements to system architecture elements.",
+            "Creating the test plan.",
+            "Defining the manufacturing process."
+        ],
+        "answer": "Assigning requirements to system architecture elements."
+    },
+    {
+        "id": "se_14",
+        "question": "Which of the following is a functional requirement?",
+        "options": [
+            "The battery weight shall be below 15 kg.",
+            "The battery shall transmit the State of Charge value on the CAN bus at intervals not exceeding 1 second.",
+            "The housing shall be black.",
+            "The cost shall be below €100."
+        ],
+        "answer": "The battery shall transmit the State of Charge value on the CAN bus at intervals not exceeding 1 second."
+    },
+    {
+        "id": "se_15",
+        "question": "Which document typically describes system usage scenarios?",
+        "options": [
+            "Use Case Specification",
+            "BOM",
+            "PPAP",
+            "Control Plan"
+        ],
+        "answer": "Use Case Specification"
+    },
+    {
+        "id": "se_16",
+        "question": "Which of the following represents a mechanical interface?",
+        "options": [
+            "CAN Bus",
+            "LIN Bus",
+            "Battery terminals and mounting points in the vehicle",
+            "SoC algorithm"
+        ],
+        "answer": "Battery terminals and mounting points in the vehicle"
+    },
+    {
+        "id": "se_17",
+        "question": "What does validation ('Are we building the right system?') mean?",
+        "options": [
+            "Verifying implementation of requirements.",
+            "Demonstrating that the product fulfills user needs and operational purpose.",
+            "Reviewing source code.",
+            "Calibrating sensors."
+        ],
+        "answer": "Demonstrating that the product fulfills user needs and operational purpose."
+    },
+    {
+        "id": "se_18",
+        "question": "What problem occurs if a requirement is not traceable to a stakeholder requirement?",
+        "options": [
+            "No problem.",
+            "Increased risk of implementing unjustified functionality ('gold plating').",
+            "The battery cost decreases.",
+            "Validation becomes simpler."
+        ],
+        "answer": "Increased risk of implementing unjustified functionality ('gold plating')."
+    },
+    {
+        "id": "se_19",
+        "question": "Which of the following represents a battery operational mode?",
+        "options": [
+            "Nominal, Sleep, Fault, Transport",
+            "Hardware, Software, Mechanical",
+            "Requirement, Design, Test",
+            "Input, Output, Processing"
+        ],
+        "answer": "Nominal, Sleep, Fault, Transport"
+    },
+    {
+        "id": "se_20",
+        "question": "For the requirement 'Battery shall prevent operation outside the allowable cell temperature range.' What is the best verification method?",
+        "options": [
+            "Inspection",
+            "Demonstration",
+            "Functional testing at temperatures outside the allowable limits",
+            "Document review"
+        ],
+        "answer": "Functional testing at temperatures outside the allowable limits"
+    },
+    {
+        "id": "se_21",
+        "question": "What represents a system function?",
+        "options": [
+            "NTC sensor",
+            "Electrical terminal contact",
+            "Monitoring and reporting SoC to the vehicle",
+            "Cover fastening screw"
+        ],
+        "answer": "Monitoring and reporting SoC to the vehicle"
+    },
+    {
+        "id": "se_22",
+        "question": "What is an unambiguous requirement?",
+        "options": [
+            "The battery must have high performance.",
+            "The battery must have good autonomy.",
+            "The battery shall provide at least 6 Ah at 25°C and 100% SoC.",
+            "The battery must be robust."
+        ],
+        "answer": "The battery shall provide at least 6 Ah at 25°C and 100% SoC."
+    },
+    {
+        "id": "se_23",
+        "question": "In the system architecture, which element is responsible for energy management?",
+        "options": [
+            "Vehicle ECU",
+            "Battery Management System (BMS)",
+            "Battery housing",
+            "Service connector"
+        ],
+        "answer": "Battery Management System (BMS)"
+    },
+    {
+        "id": "se_24",
+        "question": "Which of the following indicates a poorly formulated requirement?",
+        "options": [
+            "Battery shall support communication via CAN 500 kbit/s.",
+            "Battery shall provide SoC accuracy better than ±5%.",
+            "Battery shall have sufficient current capability.",
+            "Battery shall operate from -30°C to +60°C."
+        ],
+        "answer": "Battery shall have sufficient current capability."
+    },
+    {
+        "id": "se_25",
+        "question": "Which artifact is essential for demonstrating verification completeness?",
+        "options": [
+            "Requirement-to-Test Case Traceability Matrix",
+            "BOM",
+            "CAD Model",
+            "PPAP"
+        ],
+        "answer": "Requirement-to-Test Case Traceability Matrix"
+    },
+    {
+        "id": "se_26",
+        "question": "A system requirement states: 'Battery shall withstand reverse polarity connection for 60 seconds.' This is:",
+        "options": [
+            "A functional requirement.",
+            "An interface requirement.",
+            "A robustness/protection requirement.",
+            "A logistics requirement."
+        ],
+        "answer": "A robustness/protection requirement."
+    },
+    {
+        "id": "se_27",
+        "question": "What is the main purpose of System Requirements Definition?",
+        "options": [
+            "Implementing BMS software.",
+            "Defining system requirements based on stakeholder requirements.",
+            "Selecting the cell supplier.",
+            "Executing validation tests."
+        ],
+        "answer": "Defining system requirements based on stakeholder requirements."
+    },
+    {
+        "id": "se_28",
+        "question": "Which of the following is a correctly formulated system requirement?",
+        "options": [
+            "The battery must be very reliable.",
+            "The battery must use prismatic cells.",
+            "The battery shall provide at least 300 A for 5 seconds at -18°C.",
+            "The BMS shall use modern algorithms."
+        ],
+        "answer": "The battery shall provide at least 300 A for 5 seconds at -18°C."
+    },
+    {
+        "id": "se_29",
+        "question": "In the V-Cycle, verification of system requirements is performed through:",
+        "options": [
+            "Marketing reviews.",
+            "Verification activities defined for each requirement.",
+            "Supplier selection.",
+            "BOM updates."
+        ],
+        "answer": "Verification activities defined for each requirement."
+    },
+    {
+        "id": "se_30",
+        "question": "What does system architecture represent for a 12V Li-Ion battery?",
+        "options": [
+            "The complete list of purchased components.",
+            "The functional and physical structure of the elements that realize system functions.",
+            "The production plan.",
+            "The service strategy."
+        ],
+        "answer": "The functional and physical structure of the elements that realize system functions."
+    },
+    {
+        "id": "se_31",
+        "question": "Which of the following is a stakeholder for a 12V automotive battery?",
+        "options": [
+            "The vehicle OEM.",
+            "Only the software developer.",
+            "Only the cell supplier.",
+            "Only the end user."
+        ],
+        "answer": "The vehicle OEM."
+    },
+    {
+        "id": "se_32",
+        "question": "What is the purpose of requirements traceability in the V-Cycle?",
+        "options": [
+            "Reducing the number of requirements.",
+            "Linking higher-level requirements with architecture, implementation, and verification.",
+            "Eliminating testing.",
+            "Reducing production costs."
+        ],
+        "answer": "Linking higher-level requirements with architecture, implementation, and verification."
+    },
+    {
+        "id": "se_33",
+        "question": "A system requirement states: 'Battery shall support vehicle operation during engine cranking.' What information is missing to make the requirement fully verifiable?",
+        "options": [
+            "The person responsible for verification.",
+            "Measurable values and test conditions.",
+            "Supplier name.",
+            "Battery cost."
+        ],
+        "answer": "Measurable values and test conditions."
+    },
+    {
+        "id": "se_34",
+        "question": "Which activity belongs to system validation?",
+        "options": [
+            "Verifying PCB connections.",
+            "Testing whether the system satisfies vehicle and user needs.",
+            "Source code analysis.",
+            "Programming the microcontroller."
+        ],
+        "answer": "Testing whether the system satisfies vehicle and user needs."
+    },
+    {
+        "id": "se_35",
+        "question": "Which of the following represents an external interface of a 12V battery?",
+        "options": [
+            "SoC estimation.",
+            "Balancing algorithm.",
+            "CAN bus connection to the vehicle.",
+            "Calibration table."
+        ],
+        "answer": "CAN bus connection to the vehicle."
+    },
+    {
+        "id": "se_36",
+        "question": "According to V-Cycle principles, for the requirement 'Battery shall provide State of Charge information via CAN' which artifact must exist?",
+        "options": [
+            "At least one associated verification test case.",
+            "Only a mechanical drawing.",
+            "Only a cost analysis.",
+            "Only supplier documentation."
+        ],
+        "answer": "At least one associated verification test case."
+    }
+],
     "Quality": [
         {"id": "q_1", "question": 'What does "quality" mean for a product or service?', "options": ["To be the most expensive", "To fulfill the client's requirements and expectations", "To receive the highest number of likes"], "answer": "To fulfill the client's requirements and expectations"},
         {"id": "q_2", "question": "You find a problem in a product. What is the best approach?", "options": ["If the client didn't notice it, you ignore it", "You quickly fix it without looking for the root cause", "You investigate the issue, identify the root cause and correct it"], "answer": "You investigate the issue, identify the root cause and correct it"},
