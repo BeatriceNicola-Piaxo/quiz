@@ -172,8 +172,7 @@ QUESTION_POOLS = {
         "options": [
             "The battery shall communicate via CAN 2.0B because this is the vehicle interface.",
             "The battery shall estimate SoC.",
-            "The battery shall monitor temperature.",
-            "The battery shall support Sleep mode."
+            "The battery shall monitor temperature."
         ],
         "answer": "The battery shall communicate via CAN 2.0B because this is the vehicle interface."
     },
@@ -183,8 +182,7 @@ QUESTION_POOLS = {
         "options": [
             "Reducing production costs.",
             "Assigning requirements to system architecture elements.",
-            "Creating the test plan.",
-            "Defining the manufacturing process."
+            "Creating the test plan."
         ],
         "answer": "Assigning requirements to system architecture elements."
     },
@@ -194,8 +192,7 @@ QUESTION_POOLS = {
         "options": [
             "The battery weight shall be below 15 kg.",
             "The battery shall transmit the State of Charge value on the CAN bus at intervals not exceeding 1 second.",
-            "The housing shall be black.",
-            "The cost shall be below €100."
+            "The housing shall be black."
         ],
         "answer": "The battery shall transmit the State of Charge value on the CAN bus at intervals not exceeding 1 second."
     },
@@ -205,8 +202,7 @@ QUESTION_POOLS = {
         "options": [
             "Use Case Specification",
             "BOM",
-            "PPAP",
-            "Control Plan"
+            "PPAP"
         ],
         "answer": "Use Case Specification"
     },
@@ -216,8 +212,7 @@ QUESTION_POOLS = {
         "options": [
             "CAN Bus",
             "LIN Bus",
-            "Battery terminals and mounting points in the vehicle",
-            "SoC algorithm"
+            "Battery terminals and mounting points in the vehicle"
         ],
         "answer": "Battery terminals and mounting points in the vehicle"
     },
@@ -227,8 +222,7 @@ QUESTION_POOLS = {
         "options": [
             "Verifying implementation of requirements.",
             "Demonstrating that the product fulfills user needs and operational purpose.",
-            "Reviewing source code.",
-            "Calibrating sensors."
+            "Reviewing source code."
         ],
         "answer": "Demonstrating that the product fulfills user needs and operational purpose."
     },
@@ -238,8 +232,7 @@ QUESTION_POOLS = {
         "options": [
             "No problem.",
             "Increased risk of implementing unjustified functionality ('gold plating').",
-            "The battery cost decreases.",
-            "Validation becomes simpler."
+            "The battery cost decreases."
         ],
         "answer": "Increased risk of implementing unjustified functionality ('gold plating')."
     },
@@ -249,8 +242,7 @@ QUESTION_POOLS = {
         "options": [
             "Nominal, Sleep, Fault, Transport",
             "Hardware, Software, Mechanical",
-            "Requirement, Design, Test",
-            "Input, Output, Processing"
+            "Requirement, Design, Test"
         ],
         "answer": "Nominal, Sleep, Fault, Transport"
     },
@@ -260,8 +252,7 @@ QUESTION_POOLS = {
         "options": [
             "Inspection",
             "Demonstration",
-            "Functional testing at temperatures outside the allowable limits",
-            "Document review"
+            "Functional testing at temperatures outside the allowable limits"
         ],
         "answer": "Functional testing at temperatures outside the allowable limits"
     },
@@ -271,8 +262,7 @@ QUESTION_POOLS = {
         "options": [
             "NTC sensor",
             "Electrical terminal contact",
-            "Monitoring and reporting SoC to the vehicle",
-            "Cover fastening screw"
+            "Monitoring and reporting SoC to the vehicle"
         ],
         "answer": "Monitoring and reporting SoC to the vehicle"
     },
@@ -282,8 +272,7 @@ QUESTION_POOLS = {
         "options": [
             "The battery must have high performance.",
             "The battery must have good autonomy.",
-            "The battery shall provide at least 6 Ah at 25°C and 100% SoC.",
-            "The battery must be robust."
+            "The battery shall provide at least 6 Ah at 25°C and 100% SoC."
         ],
         "answer": "The battery shall provide at least 6 Ah at 25°C and 100% SoC."
     },
@@ -293,8 +282,7 @@ QUESTION_POOLS = {
         "options": [
             "Vehicle ECU",
             "Battery Management System (BMS)",
-            "Battery housing",
-            "Service connector"
+            "Battery housing"
         ],
         "answer": "Battery Management System (BMS)"
     },
@@ -304,8 +292,7 @@ QUESTION_POOLS = {
         "options": [
             "Battery shall support communication via CAN 500 kbit/s.",
             "Battery shall provide SoC accuracy better than ±5%.",
-            "Battery shall have sufficient current capability.",
-            "Battery shall operate from -30°C to +60°C."
+            "Battery shall have sufficient current capability."
         ],
         "answer": "Battery shall have sufficient current capability."
     },
@@ -315,8 +302,7 @@ QUESTION_POOLS = {
         "options": [
             "Requirement-to-Test Case Traceability Matrix",
             "BOM",
-            "CAD Model",
-            "PPAP"
+            "CAD Model"
         ],
         "answer": "Requirement-to-Test Case Traceability Matrix"
     },
@@ -326,8 +312,7 @@ QUESTION_POOLS = {
         "options": [
             "A functional requirement.",
             "An interface requirement.",
-            "A robustness/protection requirement.",
-            "A logistics requirement."
+            "A robustness/protection requirement."
         ],
         "answer": "A robustness/protection requirement."
     },
@@ -337,8 +322,7 @@ QUESTION_POOLS = {
         "options": [
             "Implementing BMS software.",
             "Defining system requirements based on stakeholder requirements.",
-            "Selecting the cell supplier.",
-            "Executing validation tests."
+            "Selecting the cell supplier."
         ],
         "answer": "Defining system requirements based on stakeholder requirements."
     },
@@ -348,8 +332,7 @@ QUESTION_POOLS = {
         "options": [
             "The battery must be very reliable.",
             "The battery must use prismatic cells.",
-            "The battery shall provide at least 300 A for 5 seconds at -18°C.",
-            "The BMS shall use modern algorithms."
+            "The battery shall provide at least 300 A for 5 seconds at -18°C."
         ],
         "answer": "The battery shall provide at least 300 A for 5 seconds at -18°C."
     },
@@ -359,8 +342,7 @@ QUESTION_POOLS = {
         "options": [
             "Marketing reviews.",
             "Verification activities defined for each requirement.",
-            "Supplier selection.",
-            "BOM updates."
+            "Supplier selection."
         ],
         "answer": "Verification activities defined for each requirement."
     },
@@ -370,8 +352,7 @@ QUESTION_POOLS = {
         "options": [
             "The complete list of purchased components.",
             "The functional and physical structure of the elements that realize system functions.",
-            "The production plan.",
-            "The service strategy."
+            "The production plan."
         ],
         "answer": "The functional and physical structure of the elements that realize system functions."
     },
@@ -381,8 +362,7 @@ QUESTION_POOLS = {
         "options": [
             "The vehicle OEM.",
             "Only the software developer.",
-            "Only the cell supplier.",
-            "Only the end user."
+            "Only the cell supplier."
         ],
         "answer": "The vehicle OEM."
     },
@@ -392,8 +372,7 @@ QUESTION_POOLS = {
         "options": [
             "Reducing the number of requirements.",
             "Linking higher-level requirements with architecture, implementation, and verification.",
-            "Eliminating testing.",
-            "Reducing production costs."
+            "Eliminating testing."
         ],
         "answer": "Linking higher-level requirements with architecture, implementation, and verification."
     },
@@ -403,8 +382,7 @@ QUESTION_POOLS = {
         "options": [
             "The person responsible for verification.",
             "Measurable values and test conditions.",
-            "Supplier name.",
-            "Battery cost."
+            "Supplier name."
         ],
         "answer": "Measurable values and test conditions."
     },
@@ -414,8 +392,7 @@ QUESTION_POOLS = {
         "options": [
             "Verifying PCB connections.",
             "Testing whether the system satisfies vehicle and user needs.",
-            "Source code analysis.",
-            "Programming the microcontroller."
+            "Source code analysis."
         ],
         "answer": "Testing whether the system satisfies vehicle and user needs."
     },
@@ -425,8 +402,7 @@ QUESTION_POOLS = {
         "options": [
             "SoC estimation.",
             "Balancing algorithm.",
-            "CAN bus connection to the vehicle.",
-            "Calibration table."
+            "CAN bus connection to the vehicle."
         ],
         "answer": "CAN bus connection to the vehicle."
     },
@@ -436,8 +412,7 @@ QUESTION_POOLS = {
         "options": [
             "At least one associated verification test case.",
             "Only a mechanical drawing.",
-            "Only a cost analysis.",
-            "Only supplier documentation."
+            "Only a cost analysis."
         ],
         "answer": "At least one associated verification test case."
     }
